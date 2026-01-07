@@ -152,7 +152,7 @@ export const NodeInspector = ({
           <input
             type="number"
             className={inputClass}
-            value={typeof value === "number" ? value : value ?? ""}
+            value={typeof value === "number" ? value : ""}
             placeholder={field.placeholder}
             ref={registerRef}
             onChange={(event) =>
