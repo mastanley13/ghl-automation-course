@@ -48,24 +48,17 @@ export const Sidebar = ({ manifest, isOpen, onClose }: SidebarProps) => {
         <div className="module-list">
           {manifest.map((entry) => {
             const module = progress.modules[entry.moduleId];
-            const status = module?.status ?? "locked";
-            const isLocked = status === "locked";
+            const status = module?.status ?? "available";
+            const displayStatus = status === "locked" ? "available" : status;
             const showModuleId = !entry.title.startsWith(entry.moduleId);
             const linkClass = [
               "module-link",
-              isLocked ? "module-link--locked" : "",
-              status === "completed" ? "module-link--completed" : ""
+              displayStatus === "completed" ? "module-link--completed" : ""
             ]
               .filter(Boolean)
               .join(" ");
 
-            return isLocked ? (
-              <div key={entry.moduleId} className={linkClass}>
-                {showModuleId && <span className="module-id">{entry.moduleId}</span>}
-                <span className="module-title">{entry.title}</span>
-                <span className="status-badge status-badge--locked">Locked</span>
-              </div>
-            ) : (
+            return (
               <Link
                 key={entry.moduleId}
                 href={`/modules/${entry.moduleId}`}
@@ -74,10 +67,8 @@ export const Sidebar = ({ manifest, isOpen, onClose }: SidebarProps) => {
               >
                 {showModuleId && <span className="module-id">{entry.moduleId}</span>}
                 <span className="module-title">{entry.title}</span>
-                <span
-                  className={`status-badge status-badge--${status}`}
-                >
-                  {status === "completed" ? "Done" : "Open"}
+                <span className={`status-badge status-badge--${displayStatus}`}>
+                  {displayStatus === "completed" ? "Done" : "Open"}
                 </span>
               </Link>
             );

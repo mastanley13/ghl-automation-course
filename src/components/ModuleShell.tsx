@@ -406,8 +406,8 @@ export const ModuleShell = ({
   const { send, setContext } = useCopilot();
 
   const moduleProgress = progress.modules[moduleId];
-  const status = moduleProgress?.status ?? "locked";
-  const isLocked = status === "locked";
+  const status = moduleProgress?.status ?? "available";
+  const displayStatus = status === "locked" ? "available" : status;
   const teachBackText = moduleProgress?.teachBack ?? "";
 
   const wordCount = useMemo(() => {
@@ -496,8 +496,8 @@ export const ModuleShell = ({
         <div className="eyebrow">{phase}</div>
         <h1 className="page-title">{title}</h1>
         <div className="module-meta">
-          <span className={`status-pill status-pill--${status}`}>
-            {status === "completed" ? "Completed" : isLocked ? "Locked" : "In progress"}
+          <span className={`status-pill status-pill--${displayStatus}`}>
+            {displayStatus === "completed" ? "Completed" : "In progress"}
           </span>
           <span className="meta-item">
             Checks run: {moduleProgress?.attempts.validate ?? 0}
@@ -510,12 +510,6 @@ export const ModuleShell = ({
           <GlossaryPanel />
         </div>
       </header>
-
-      {isLocked && (
-        <div className="callout callout-warning">
-          This module is locked. Complete the previous module to unlock it.
-        </div>
-      )}
 
       <div className="lesson-flow">
         <div className="lesson-flow-header">
@@ -548,7 +542,7 @@ export const ModuleShell = ({
                   ? "active"
                   : "todo";
             const isFutureLocked = guidedFlow && index > activeTabIndex + 1;
-            const disabled = (isLocked && tab.key !== "Learn") || isFutureLocked;
+            const disabled = isFutureLocked;
             return (
               <button
                 key={tab.key}
@@ -585,7 +579,6 @@ export const ModuleShell = ({
               <button
                 className="btn"
                 onClick={() => setActiveTab("Build")}
-                disabled={isLocked}
               >
                 Next: Practice in Build
               </button>
@@ -728,7 +721,6 @@ export const ModuleShell = ({
               placeholder="Write your teach-back here..."
               value={teachBackText}
               onChange={(event) => updateTeachBack(moduleId, event.target.value)}
-              disabled={isLocked}
             />
             <div className="teachback-meta">
               <span>
@@ -752,7 +744,7 @@ export const ModuleShell = ({
               <button
                 className="btn"
                 onClick={handleTeachBackSubmit}
-                disabled={!canSubmitTeachBack || isLocked}
+                disabled={!canSubmitTeachBack}
               >
                 Submit teach-back
               </button>

@@ -94,7 +94,7 @@
     },
     {
       "level": 2,
-      "text": "Connect both True and Else outputs and end each in end."
+      "text": "Connect both True and Else outputs and leave each branch with no further steps to end it."
     },
     {
       "level": 3,

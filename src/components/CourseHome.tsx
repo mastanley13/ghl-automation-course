@@ -35,13 +35,12 @@ export const CourseHome = ({ manifest }: CourseHomeProps) => {
         <div className="module-grid">
           {manifest.map((entry) => {
             const module = progress.modules[entry.moduleId];
-            const status = module?.status ?? "locked";
-            const isLocked = status === "locked";
+            const status = module?.status ?? "available";
+            const displayStatus = status === "locked" ? "available" : status;
             const showModuleId = !entry.title.startsWith(entry.moduleId);
             const linkClass = [
               "module-card",
-              isLocked ? "module-card--locked" : "",
-              status === "completed" ? "module-card--completed" : ""
+              displayStatus === "completed" ? "module-card--completed" : ""
             ]
               .filter(Boolean)
               .join(" ");
@@ -50,19 +49,15 @@ export const CourseHome = ({ manifest }: CourseHomeProps) => {
               <div key={entry.moduleId} className={linkClass}>
                 <div className="module-card-header">
                   {showModuleId && <span className="module-id">{entry.moduleId}</span>}
-                  <span className={`status-pill status-pill--${status}`}>
-                    {status === "completed" ? "Completed" : isLocked ? "Locked" : "Available"}
+                  <span className={`status-pill status-pill--${displayStatus}`}>
+                    {displayStatus === "completed" ? "Completed" : "Available"}
                   </span>
                 </div>
                 <div className="module-card-title">{entry.title}</div>
                 <div className="module-card-phase">{entry.phase}</div>
-                {isLocked ? (
-                  <div className="module-card-action muted">Finish the previous module to unlock.</div>
-                ) : (
-                  <Link className="module-card-action" href={`/modules/${entry.moduleId}`}>
-                    Open lesson
-                  </Link>
-                )}
+                <Link className="module-card-action" href={`/modules/${entry.moduleId}`}>
+                  Open lesson
+                </Link>
               </div>
             );
           })}

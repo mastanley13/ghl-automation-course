@@ -33,9 +33,9 @@ const STORAGE_KEY = "ghlwm:progress:v1";
 
 const buildDefaultProgress = (manifest: ModuleManifestEntry[]): ProgressState => {
   const modules: Record<string, ModuleProgress> = {};
-  manifest.forEach((entry, index) => {
+  manifest.forEach((entry) => {
     modules[entry.moduleId] = {
-      status: index === 0 ? "available" : "locked",
+      status: "available",
       attempts: { validate: 0, simulate: 0 },
       teachBack: ""
     };
@@ -56,8 +56,10 @@ const mergeProgress = (
   for (const entry of manifest) {
     const savedModule = saved.modules?.[entry.moduleId];
     if (savedModule) {
+      const savedStatus =
+        savedModule.status === "locked" ? "available" : savedModule.status;
       merged.modules[entry.moduleId] = {
-        status: savedModule.status ?? baseline.modules[entry.moduleId].status,
+        status: savedStatus ?? baseline.modules[entry.moduleId].status,
         attempts: savedModule.attempts ?? baseline.modules[entry.moduleId].attempts,
         teachBack: savedModule.teachBack ?? ""
       };

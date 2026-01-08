@@ -52,7 +52,7 @@ Explain why this workflow uses If/Else and how it prevents a common automation f
 
 ## Hints
 - Hint 1: Use an If/Else step after the trigger with condition: field exists phone.
-- Hint 2: Connect both True and Else outputs and end each in end.
+- Hint 2: Connect both True and Else outputs and leave each branch with no further steps to end it.
 - Hint 3: If TC1 fails, check SMS is on the True branch; if TC2 fails, check Email is on Else.
 
 ## Admin notes (do not show learners)
